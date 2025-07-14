@@ -15,5 +15,6 @@ export class PaymentController {
     @EventPattern('order.payment-started')
     orderPaymentStarted(@Payload() paymentInfo: any, @Ctx() context: KafkaContext) {
         console.log(`message received from topic: ', ${context.getTopic()} in partition: ', ${context.getPartition()}`);
+        this.paymentService.orderPaymentSuccessed(paymentInfo);
     }
 }

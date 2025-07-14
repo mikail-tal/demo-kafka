@@ -1,13 +1,18 @@
-import {Inject, Injectable} from '@nestjs/common';
-import {ClientKafkaProxy, Payload} from "@nestjs/microservices";
-import {OrderDto} from "../../../dto/order.dto";
+import {Inject, Injectable, OnModuleInit} from '@nestjs/common';
+import {ClientKafkaProxy} from "@nestjs/microservices";
 
 @Injectable()
 export class NotificationsService {
     constructor(@Inject('KAFKA_SERVICE') private kafkaClient: ClientKafkaProxy) {
     }
 
-    startPaymentProcess(@Payload() order: OrderDto) {
-        this.kafkaClient.emit('order.payment.started', order);
+    startPaymentProcess(payment: any) {
+        // create object payment
+        console.log("paiment");
+        this.kafkaClient.emit('order.payment-started', payment);
+
+        return {
+            message: 'Order payment started successfully, event sent to kafka...',
+        };
     }
 }

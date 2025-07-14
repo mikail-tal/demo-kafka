@@ -1,4 +1,4 @@
-import {Controller} from '@nestjs/common';
+import {Controller, Get} from '@nestjs/common';
 import {LogsService} from './logs.service';
 import {Ctx, EventPattern, KafkaContext, MessagePattern, Payload} from "@nestjs/microservices";
 import {OrderDto} from "../../../dto/order.dto";
@@ -7,6 +7,13 @@ import {OrderDto} from "../../../dto/order.dto";
 export class LogsController {
     constructor(private readonly logsService: LogsService) {
     }
+
+    @Get()
+    getHello(): string {
+        return this.logsService.getHello();
+    }
+
+    // TODO : connect bdd to store logs
 
     // permet de consommer sans retourer un message
     @EventPattern('order.created')
@@ -31,7 +38,7 @@ export class LogsController {
     }
 
 
-    // recevoir un message et permet de retourner un message en retour sur une autre topic
+    // recevoir un message et permet de retourner une reply
     @MessagePattern('order.get-logs')
     getOrderLogs() {
         return {

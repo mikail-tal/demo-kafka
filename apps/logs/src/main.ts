@@ -15,7 +15,7 @@ async function bootstrap() {
                 consumer: {
                     groupId: 'logs-consumer',
                     allowAutoTopicCreation: true
-                },
+                }
             },
         },
     );

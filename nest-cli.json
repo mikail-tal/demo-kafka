@@ -10,6 +10,15 @@
   "monorepo": true,
   "root": "apps",
   "projects": {
+    "delivery-app": {
+      "type": "application",
+      "root": "apps/delivery",
+      "entryFile": "main",
+      "sourceRoot": "apps/delivery/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/delivery/tsconfig.app.json"
+      }
+    },
     "logs-app": {
       "type": "application",
       "root": "apps/logs",
