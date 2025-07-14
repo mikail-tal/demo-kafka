@@ -20,12 +20,11 @@ export class OrdersController {
 
     @EventPattern('order.get-logs.reply')
     handleReply(@Payload() data: any, @Ctx() context: KafkaContext) {
-        console.log(data);
-        console.log(`message received from topic: ', ${context.getTopic()} in partition: ', ${context.getPartition()}`);
+        console.log(`message received from topic:${context.getTopic()} in partition:${context.getPartition()}`);
     }
 
     @EventPattern('order.completed')
     orderCompleted(@Payload() data: any, @Ctx() context: KafkaContext) {
-        console.log(`message received from topic: ', ${context.getTopic()} in partition: ', ${context.getPartition()}`);
+        console.log(`message received from topic:${context.getTopic()} in partition:${context.getPartition()}`);
     }
 }

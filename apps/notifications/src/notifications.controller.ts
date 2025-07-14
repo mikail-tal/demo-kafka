@@ -11,9 +11,7 @@ export class NotificationsController {
     // permet de consommer sans retourer un message
     @EventPattern('order.created')
     handleOrderCreated(@Payload() order: OrderDto, @Ctx() context: KafkaContext) {
-        //TODO: objet payment
-        console.log(order);
-        console.log(`message received from topic: ', ${context.getTopic()} in partition: ', ${context.getPartition()}`);
+        console.log(`message received from topic:${context.getTopic()} in partition:${context.getPartition()}`);
         this.notificationsService.startPaymentProcess(order);
     }
 }

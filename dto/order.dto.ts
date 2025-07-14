@@ -1,7 +1,12 @@
 import {IsArray, IsEmail} from 'class-validator';
 
 export class OrderDto {
-    readonly id: string = crypto.randomUUID();
+
+    id: string;
+
+    status: string;
+
+    adresse: string;
 
     @IsEmail()
     email: string;
@@ -10,5 +15,8 @@ export class OrderDto {
     items: {
         productId: string;
         quantity: number;
+        price: number;
     }[];
+
+
 }

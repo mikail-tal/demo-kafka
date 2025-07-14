@@ -1,5 +1,6 @@
 import {Inject, Injectable, OnModuleInit} from '@nestjs/common';
 import {ClientKafkaProxy} from "@nestjs/microservices";
+import {OrderDto} from "../../../dto/order.dto";
 
 @Injectable()
 export class OrdersService implements OnModuleInit {
@@ -10,11 +11,9 @@ export class OrdersService implements OnModuleInit {
         this.kafkaClient.subscribeToResponseOf('order.get-logs');
     }
 
-    async createOrder(order: any) {
-        console.log(order);
-
+    async createOrder(order: OrderDto) {
         //emit a message to kafka envoyer sans attendre le retour de message
-        this.kafkaClient.emit('order.created', order); // Message: value, key, headers
+        this.kafkaClient.emit('order.created', {key: order.id, value: order}); // Message: value, key, headers
         // Logic for creating an order
         return {
             message: 'Order created successfully sent to kafka',

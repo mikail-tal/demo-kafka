@@ -1,6 +1,7 @@
 import {Controller, Get} from '@nestjs/common';
 import {DeliveryService} from './delivery.service';
 import {Ctx, EventPattern, KafkaContext, Payload} from "@nestjs/microservices";
+import {DeliveryDto} from "../../../dto/delivery.dto";
 
 @Controller()
 export class DeliveryController {
@@ -13,8 +14,8 @@ export class DeliveryController {
     }
 
     @EventPattern('order.payment-processed')
-    orderCompleted(@Payload() data: any, @Ctx() context: KafkaContext) {
-        console.log(`message received from topic: ', ${context.getTopic()} in partition: ', ${context.getPartition()}`);
-        this.deliveryService.orderCompleted(data);
+    orderCompleted(@Payload() deliveryDto: DeliveryDto, @Ctx() context: KafkaContext) {
+        console.log(`message received from topic:${context.getTopic()} in partition:${context.getPartition()}`);
+        this.deliveryService.orderCompleted(deliveryDto);
     }
 }

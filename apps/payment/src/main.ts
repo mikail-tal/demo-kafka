@@ -1,7 +1,6 @@
 import {NestFactory} from '@nestjs/core';
 import {PaymentModule} from './payment.module';
 import {MicroserviceOptions, Transport} from "@nestjs/microservices";
-import {DeliveryModule} from "../../delivery/src/delivery.module";
 
 async function bootstrap() {
     const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -10,7 +9,6 @@ async function bootstrap() {
             transport: Transport.KAFKA,
             options: {
                 client: {
-                    clientId: 'payment-service',
                     brokers: ['localhost:9092'],
                 },
                 consumer: {

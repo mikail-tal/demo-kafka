@@ -1,5 +1,7 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {ClientKafkaProxy} from "@nestjs/microservices";
+import {DeliveryDto} from "../../../dto/delivery.dto";
+import {OrderDto} from "../../../dto/order.dto";
 
 @Injectable()
 export class DeliveryService {
@@ -11,10 +13,15 @@ export class DeliveryService {
         return 'Hello World!';
     }
 
-    orderCompleted(payment: any) {
-        console.log(payment);
-        // start livraison when payment is done
-        this.kafkaClient.emit('order.completed', payment);
+    orderCompleted(data: DeliveryDto) {
+        const orderCompleted: OrderDto = {
+            id: data.idOrder,
+            status: 'delivered',
+            adresse: data.adresse,
+            email: data.email,
+            items: [],
+        }
+        this.kafkaClient.emit('order.completed', orderCompleted);
 
         return {
             message: 'Order delivered successfully, event sent to kafka...',

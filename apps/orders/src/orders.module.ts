@@ -11,16 +11,8 @@ import {ClientsModule, Transport} from "@nestjs/microservices";
                 transport: Transport.KAFKA,
                 options: {
                     client: {
-                        clientId: 'orders-service',
                         brokers: ['localhost:9092'],
                     },
-                    producer: {
-                        allowAutoTopicCreation: true,
-                    },
-                    consumer: {
-                        groupId: 'orders-consumer',
-                        allowAutoTopicCreation: true,
-                    }
                 },
             },
         ]),
