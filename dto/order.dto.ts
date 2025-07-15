@@ -1,22 +1,19 @@
-import {IsArray, IsEmail} from 'class-validator';
+import { IsArray, IsEmail } from 'class-validator';
 
 export class OrderDto {
+  id: string;
 
-    id: string;
+  status: string;
 
-    status: string;
+  adresse: string;
 
-    adresse: string;
+  @IsEmail()
+  email: string;
 
-    @IsEmail()
-    email: string;
-
-    @IsArray()
-    items: {
-        productId: string;
-        quantity: number;
-        price: number;
-    }[];
-
-
+  @IsArray()
+  items: {
+    productId: string;
+    quantity: number;
+    price: number;
+  }[];
 }
