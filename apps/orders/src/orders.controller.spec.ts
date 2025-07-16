@@ -1,26 +1,53 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { OrdersController } from './orders.controller';
-import { OrdersService } from './orders.service';
-import { orderCreatedTestDto } from '../test/data-test/orderCreatedTestDto';
-import { MicroserviceOptions } from '@nestjs/microservices';
+import {Test, TestingModule} from '@nestjs/testing';
+import {INestApplication} from "@nestjs/common";
+import {OrdersModule} from "./orders.module";
+import * as request from 'supertest';
+import {orderCreatedTestDto} from "../test/data-test/orderCreatedTestDto";
+import {Kafka, logLevel} from "kafkajs";
 
-describe('OrdersController', () => {
-  let ordersController: OrdersController;
+describe('OrdersController (e2e)', () => {
+    let app: INestApplication;
+    // let producer: any;
+    //
+    // const kafka = new Kafka({
+    //     clientId: 'e2e-test-client',
+    //     brokers: ['localhost:9092'],
+    //     logLevel: logLevel.ERROR,
+    // });
 
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [OrdersController],
-      providers: [OrdersService],
-    }).compile();
-    app.createNestMicroservice<MicroserviceOptions>(app.get('KAFKA_SERVICE'));
-    ordersController = app.get<OrdersController>(OrdersController);
-  });
+    beforeAll(async () => {
+        const orderModuleTest: TestingModule = await Test.createTestingModule({
+            imports: [OrdersModule],
+            // providers: [
+            //     {
+            //         provide: 'KAFKA_SERVICE',
+            //         useValue: {
+            //             emit: jest.fn(),
+            //             send: jest.fn(),
+            //             subscribeToResponseOf: jest.fn(),
+            //         }
+            //     }
+            // ]
+        }).compile();
 
-  describe('create order', () => {
-    it('should sent event to kafka', () => {
-      expect(ordersController.createOrder(orderCreatedTestDto)).toBe({
-        message: 'Order created successfully sent to kafka',
-      });
+        app = orderModuleTest.createNestApplication();
+        await app.init();
     });
-  });
+
+    it('/POST orders', () => {
+        return request(app.getHttpServer())
+            .post('/orders')
+            .send(orderCreatedTestDto)
+            .expect(201);
+    });
+
+    it('/GET orders/:id/logs', () => {
+        return request(app.getHttpServer())
+            .get('/orders/1/logs')
+            .expect(200);
+    });
+
+    afterAll(async () => {
+        await app.close();
+    });
 });
